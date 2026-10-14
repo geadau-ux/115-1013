@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>引動學生思考的教材教法共備</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            anpan: {
+              red: '#E53935',
+              darkred: '#C62828',
+              yellow: '#FFB300',
+              gold: '#F57F17',
+              orange: '#FF7043',
+              cream: '#FFFDE7',
+              bg: '#FFF8E1',
+              brown: '#4E2712',
+              softbrown: '#795548',
+            }
+          },
+          fontFamily: {
+            sans: ['Noto Sans TC', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #FFF8E1;
+      color: #3E2723;
+    }
+    .anpan-card {
+      background-color: #FFFFFF;
+      border: 3px solid #4E2712;
+      box-shadow: 5px 5px 0px #4E2712;
+      border-radius: 1.25rem;
+    }
+    .anpan-btn {
+      border: 2.5px solid #4E2712;
+      box-shadow: 3px 3px 0px #4E2712;
+      transition: all 0.15s ease-in-out;
+    }
+    .anpan-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #4E2712;
+    }
+    .anpan-badge {
+      border: 2px solid #4E2712;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col pb-12">
+
+  <!-- 頁首與音訊控制 -->
+  <header class="bg-anpan-red text-white border-b-4 border-anpan-brown sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-anpan-yellow rounded-full border-2 border-anpan-brown flex items-center justify-center text-anpan-brown text-2xl font-black shadow-inner">
+          思
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-black tracking-wide drop-shadow text-amber-100">
+            引動學生思考的教材教法共備
+          </h1>
+          <p class="text-xs sm:text-sm text-yellow-200 font-bold">
+            從「這題怎麼教」轉向「學生在這裡想什麼」
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- 使用說明按鈕 -->
+        <button onclick="toggleGuideModal()" class="anpan-btn bg-white hover:bg-amber-100 text-anpan-brown font-extrabold px-3.5 py-2 rounded-full text-sm flex items-center gap-1.5 cursor-pointer shadow-sm">
+          <span>📖</span>
+          <span>使用說明</span>
+        </button>
+
+        <!-- 音訊播放按鈕 -->
+        <button id="audio-btn" onclick="toggleAudio()" class="anpan-btn bg-anpan-yellow hover:bg-yellow-400 text-anpan-brown font-extrabold px-4 py-2 rounded-full text-sm flex items-center gap-2 cursor-pointer">
+          <span id="audio-icon" class="text-base">🎵</span>
+          <span id="audio-text">🎵數學動起來.mp3</span>
+        </button>
+
+        <!-- 主講人資訊標籤 -->
+        <div class="anpan-badge bg-amber-100 text-anpan-brown font-bold text-xs sm:text-sm px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
+          <span>👨‍🏫 主講人：謝佳叡 副教授 (國立臺北教育大學)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 主選單 Tab 導覽 -->
+    <nav class="bg-anpan-yellow border-t-2 border-anpan-brown px-2 py-2 overflow-x-auto">
+      <div class="max-w-7xl mx-auto flex space-x-2 min-w-max">
+        <button id="btn-tab1" onclick="switchTab('tab1')" class="tab-btn anpan-btn px-4 py-2 rounded-xl font-bold text-sm bg-anpan-red text-white shadow-lg scale-105">
+          研習簡介與理念
+        </button>
+        <button id="btn-tab2" onclick="switchTab('tab2')" class="tab-btn anpan-btn px-4 py-2 rounded-xl font-bold text-sm bg-amber-100 text-anpan-brown hover:bg-amber-200">
+          一、思考的對象與定義
+        </button>
+        <button id="btn-tab3" onclick="switchTab('tab3')" class="tab-btn anpan-btn px-4 py-2 rounded-xl font-bold text-sm bg-amber-100 text-anpan-brown hover:bg-amber-200">
+          二、會考與課本實例
+        </button>
+        <button id="btn-tab4" onclick="switchTab('tab4')" class="tab-btn anpan-btn px-4 py-2 rounded-xl font-bold text-sm bg-amber-100 text-anpan-brown hover:bg-amber-200">
+          三、提問策略與四動作
+        </button>
+        <button id="btn-tab5" onclick="switchTab('tab5')" class="tab-btn anpan-btn px-4 py-2 rounded-xl font-bold text-sm bg-amber-100 text-anpan-brown hover:bg-amber-200">
+          四、共備實作與工具
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- 主要內容區 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 flex-grow">
+
+    <!-- TAB 1: 研習簡介與理念 -->
+    <section id="tab1" class="tab-content space-y-6">
+      
+      <!-- 主 Banner -->
+      <div class="anpan-card bg-gradient-to-r from-anpan-orange to-red-500 text-white p-6 sm:p-8">
+        <div class="max-w-3xl">
+          <span class="inline-block bg-anpan-yellow text-anpan-brown font-black px-3 py-1 rounded-md text-xs sm:text-sm mb-3 border border-anpan-brown">
+            國中小數學輔導團研習講義精華
+          </span>
+          <h2 class="text-2xl sm:text-4xl font-black mb-3 leading-tight text-yellow-100">
+            讓學生產生思考，<br>用哪一句話把它引出來？
+          </h2>
+          <p class="text-sm sm:text-base text-yellow-50 opacity-95 leading-relaxed">
+            數學課堂不只是算例題與記步驟解法。今天不講深奧理論，而是聚焦於如何改變教師提問與教材包裝，從「這題怎麼教」轉向「學生在這裡想什麼」，讓數學思考真正發生。
+          </p>
+        </div>
+      </div>
+
+      <!-- 💡 初次使用：4 步驟快速操作指南 -->
+      <div class="anpan-card bg-amber-100/80 p-5 border-2 border-anpan-brown">
+        <div class="flex items-center justify-between mb-3 border-b border-amber-300 pb-2">
+          <h3 class="font-black text-anpan-brown text-base flex items-center gap-2">
+            <span>💡</span> 初次使用？4 步驟快速導覽
+          </h3>
+          <button onclick="toggleGuideModal()" class="text-xs font-bold text-anpan-red underline cursor-pointer hover:text-red-700">
+            開啟完整互動圖解 ➔
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div class="bg-white p-3 rounded-xl border border-amber-300">
+            <div class="font-black text-anpan-red mb-1">Step 1. 播放廣播廣播音訊 🎵</div>
+            <p class="text-gray-600">點擊右上角「音訊按鈕」，邊聽主題曲與重點導覽邊閱讀內容。</p>
+          </div>
+          <div class="bg-white p-3 rounded-xl border border-amber-300">
+            <div class="font-black text-anpan-gold mb-1">Step 2. 探索思考定義 🧠</div>
+            <p class="text-gray-600">切換至「一、思考對象」，對照跨領域與數學專門的思考層次檢核表。</p>
+          </div>
+          <div class="bg-white p-3 rounded-xl border border-amber-300">
+            <div class="font-black text-anpan-brown mb-1">Step 3. 觀摩試題改造 📐</div>
+            <p class="text-gray-600">進入「二、會考實例」與「三、提問策略」，參考 4 層次追問句型。</p>
+          </div>
+          <div class="bg-white p-3 rounded-xl border border-amber-300">
+            <div class="font-black text-anpan-orange mb-1">Step 4. 動手產出教案 🛠️</div>
+            <p class="text-gray-600">前往「四、共備實作」，輸入您的題目，即時生成可帶走的共備教案卡！</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 今日三大任務 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="anpan-card bg-amber-50 p-5">
+          <div class="w-10 h-10 bg-anpan-red text-white rounded-full flex items-center justify-center font-black text-lg mb-3 border-2 border-anpan-brown">
+            1
+          </div>
+          <h3 class="font-black text-lg text-anpan-brown mb-2">看見思考</h3>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            超越表面行為，區分「學生有算」不等於「學生有想」。準確看見學生在材料中進行的判斷與推理。
+          </p>
+        </div>
+
+        <div class="anpan-card bg-amber-50 p-5">
+          <div class="w-10 h-10 bg-anpan-yellow text-anpan-brown rounded-full flex items-center justify-center font-black text-lg mb-3 border-2 border-anpan-brown">
+            2
+          </div>
+          <h3 class="font-black text-lg text-anpan-brown mb-2">設計提問</h3>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            用問題拉近或拉遠學生與數學的距離。不只是題目表面的情境包裝，而是引發核心概念思考。
+          </p>
+        </div>
+
+        <div class="anpan-card bg-amber-50 p-5">
+          <div class="w-10 h-10 bg-anpan-orange text-white rounded-full flex items-center justify-center font-black text-lg mb-3 border-2 border-anpan-brown">
+            3
+          </div>
+          <h3 class="font-black text-lg text-anpan-brown mb-2">完成共備</h3>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            產出一張真正可帶走、落實在教學現場的教材改造學習單與課堂追問工具。
+          </p>
+        </div>
+      </div>
+
+      <!-- 暖身思考 5 問 -->
+      <div class="anpan-card p-6 bg-white">
+        <h3 class="text-lg font-black text-anpan-red mb-4 flex items-center gap-2">
+          <span>🧠</span> 關於思考的 5 個直覺反思（請直覺回答，不要深思）
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+          <div class="p-3.5 bg-yellow-50 rounded-xl border-2 border-yellow-200">
+            <span class="font-bold text-anpan-gold block mb-1">Q1. 屬性認知</span>
+            「思考」是動詞還是名詞？是過程還是結果？
+          </div>
+          <div class="p-3.5 bg-yellow-50 rounded-xl border-2 border-yellow-200">
+            <span class="font-bold text-anpan-gold block mb-1">Q2. 思考對象</span>
+            我們到底要學生在這一節課裡「想什麼」？
+          </div>
+          <div class="p-3.5 bg-yellow-50 rounded-xl border-2 border-yellow-200">
+            <span class="font-bold text-anpan-gold block mb-1">Q3. 引動機制</span>
+            「引動」是一個主動還是被動的過程？
+          </div>
+          <div class="p-3.5 bg-yellow-50 rounded-xl border-2 border-yellow-200">
+            <span class="font-bold text-anpan-gold block mb-1">Q4. 動力來源</span>
+            是由教材來驅動，還是由教法來策動？
+          </div>
+          <div class="p-3.5 bg-yellow-50 rounded-xl border-2 border-yellow-200 sm:col-span-2 lg:col-span-1">
+            <span class="font-bold text-anpan-gold block mb-1">Q5. 共備可行性</span>
+            如果教師個人風格過重，團體要如何進行共備？
+          </div>
+        </div>
+      </div>
+
+      <!-- 暖身任務比較 -->
+      <div class="anpan-card p-6 bg-amber-50">
+        <h3 class="text-lg font-black text-anpan-brown mb-4 flex items-center gap-2">
+          <span>🔥</span> 暖身任務：這三題有沒有「引動思考」？
+        </h3>
+        <p class="text-sm text-gray-700 mb-4">請對比以下三種不同設計的題目，思考哪一題最適合放在教學起點？</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white p-4 rounded-xl border-2 border-gray-300">
+            <div class="font-black text-gray-700 mb-2 border-b pb-1">題目 A（傳統計算）</div>
+            <p class="text-base font-bold text-center py-4 bg-gray-50 rounded border">
+              計算：½ + ⅓ = ?
+            </p>
+            <p class="text-xs text-gray-500 mt-2">偏向程式記憶與程序演練。</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-xl border-2 border-anpan-yellow">
+            <div class="font-black text-anpan-gold mb-2 border-b pb-1">題目 B（判斷推理）</div>
+            <p class="text-sm font-semibold py-2 bg-yellow-50 px-3 rounded border border-yellow-200">
+              小明說：「分母不同，所以不能直接相加。」你同意嗎？請說理由。
+            </p>
+            <p class="text-xs text-gray-500 mt-2">引導學生檢視分數單位的意涵與運算法則。</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-xl border-2 border-anpan-red">
+            <div class="font-black text-anpan-red mb-2 border-b pb-1">題目 C（特例發現/創造）</div>
+            <p class="text-sm font-semibold py-2 bg-red-50 px-3 rounded border border-red-200">
+              有沒有兩個分母不同的分數，不通分也能很快知道它們的和？
+            </p>
+            <p class="text-xs text-gray-500 mt-2">開放與特例探索，激發規律發現與觀察。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 講者經歷與資料來源敘明 -->
+      <div class="anpan-card p-6 bg-white">
+        <h3 class="text-md font-black text-anpan-brown mb-3 border-b border-gray-200 pb-2">
+          📌 研習與講者資料來源
+        </h3>
+        <div class="text-sm text-gray-700 leading-relaxed space-y-2">
+          <p><span class="font-bold text-anpan-red">主講人：</span>謝佳叡 副教授（國立臺北教育大學 數學暨資訊教育學系）</p>
+          <p><span class="font-bold text-anpan-red">學歷：</span>國立臺灣師範大學 數學教育博士</p>
+          <p><span class="font-bold text-anpan-red">重要經歷：</span>臺北市弘道國中數學教師、教育部九年一貫數學課綱諮詢委員、國中會考試題組數學非選學科專家、心測中心/大考中心試題審查委員、臺灣數學教育學會執行秘書長、《臺灣數學教師》期刊主編等。</p>
+          <p class="text-xs text-gray-500 pt-2 border-t">※ 本互動網頁資料整理自 2026/08/19 國中小數學輔導團研習講義。</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 2: 一、思考的對象與定義 -->
+    <section id="tab2" class="tab-content hidden space-y-6">
+      
+      <div class="anpan-card bg-amber-50 p-6">
+        <h2 class="text-xl sm:text-2xl font-black text-anpan-red mb-2">
+          一、說文解字：數學思考的「對象」
+        </h2>
+        <p class="text-sm text-gray-700">
+          若不知道學生要想什麼，就無法設計引動。備課時請不要只寫「培養學生思考能力」，請明確寫出：「學生要思考＿＿」。
+        </p>
+      </div>
+
+      <!-- 思考對象的兩個層次 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="anpan-card p-6 bg-white">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-8 h-8 bg-anpan-yellow text-anpan-brown font-black rounded-lg flex items-center justify-center border border-anpan-brown">A</span>
+            <h3 class="font-black text-lg text-anpan-brown">不分數學內容的思考對象</h3>
+          </div>
+          <ul class="text-sm text-gray-700 space-y-2 list-disc list-inside bg-yellow-50 p-4 rounded-xl border border-yellow-200">
+            <li>找規律、分類、比較、分析</li>
+            <li>猜想、驗證、推理、尋找反例</li>
+            <li>類比、一般化、特殊化</li>
+            <li>表徵轉換（圖像 ⇄ 文字 ⇄ 算式）</li>
+          </ul>
+        </div>
+
+        <div class="anpan-card p-6 bg-white">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-8 h-8 bg-anpan-orange text-white font-black rounded-lg flex items-center justify-center border border-anpan-brown">B</span>
+            <h3 class="font-black text-lg text-anpan-brown">與數學內容相關的思考對象</h3>
+          </div>
+          <ul class="text-sm text-gray-700 space-y-2 list-disc list-inside bg-orange-50 p-4 rounded-xl border border-orange-200">
+            <li><span class="font-bold">分數：</span>單位量的確定與比較</li>
+            <li><span class="font-bold">幾何：</span>圖形性質的不變性與決定條件</li>
+            <li><span class="font-bold">代數/函數：</span>變量之間的關係與規律</li>
+            <li><span class="font-bold">機率：</span>樣本空間與不確定性結構</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 跨單元思考對象檢核 -->
+      <div class="anpan-card p-6 bg-white">
+        <h3 class="text-lg font-black text-anpan-brown mb-4">
+          🔍 不同單元中的「核心思考對象」檢核表
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="bg-anpan-yellow text-anpan-brown border-b-2 border-anpan-brown">
+                <th class="p-3 font-black">數學領域</th>
+                <th class="p-3 font-black">核心思考檢核問題（值得學生停下來想的）</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="p-3 font-bold text-anpan-red">分數</td>
+                <td class="p-3 text-gray-700">「1」是誰？單位量如何決定大小？為什麼不能只看分子或分母？</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-anpan-red">幾何</td>
+                <td class="p-3 text-gray-700">哪些性質不變？哪些條件足以決定圖形？周長變，面積一定變嗎？</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-bold text-anpan-red">代數 / 函數</td>
+                <td class="p-3 text-gray-700">一個量如何隨另一個量變化？表格、圖形、式子是否描述同一關係？</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 核心比喻與界定 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- 比喻 -->
+        <div class="anpan-card p-6 bg-amber-100 border-2 border-anpan-brown">
+          <h3 class="font-black text-lg text-anpan-brown mb-2 flex items-center gap-2">
+            <span>🚗</span> 好用比喻：概念像車，思維像駕駛
+          </h3>
+          <p class="text-sm text-gray-700 leading-relaxed mb-3">
+            車子再精良，沒有駕駛也到不了地方。概念學得再多，若思維沒有被引動，情境中也無法選擇並啟動概念。
+          </p>
+          <div class="p-3 bg-white rounded-lg text-xs font-bold text-anpan-darkred border">
+            💡 課堂現象：學生不是「沒有學過」，而是沒有在這個情境中辨認出該啟動哪個概念、哪種方法或判斷！
+          </div>
+        </div>
+
+        <!-- 研究佐證：預留 30 秒思考 -->
+        <div class="anpan-card p-6 bg-red-50 border-2 border-anpan-red">
+          <h3 class="font-black text-lg text-anpan-red mb-2 flex items-center gap-2">
+            <span>⏱️</span> 魏姿玟 (2010) 研究發現
+          </h3>
+          <p class="text-sm text-gray-800 leading-relaxed">
+            針對七年級代數學習的研究發現：教師在講解例題前，即便<span class="font-black text-anpan-red underline decoration-wavy">只預留 30 秒的時間</span>讓學生先行思考，其學習成效幾可達到學生「趨近成功解題層次」。
+          </p>
+          <p class="text-xs text-gray-600 mt-3 font-semibold">
+            👉 老師不需要做太多，有時候只需留白給學生思考的機會！
+          </p>
+        </div>
+
+      </div>
+
+      <!-- 認知思維 vs 解題思維 -->
+      <div class="anpan-card p-6 bg-white">
+        <h3 class="text-lg font-black text-anpan-brown mb-4">
+          ⚖️ 數學認知思維 vs 數學解題思維
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
+            <h4 class="font-black text-blue-900 mb-1">數學認知思維</h4>
+            <p class="text-xs text-blue-700 mb-2 font-bold">目標：獲得認知結果</p>
+            <p class="text-gray-700">重點在認識數學內容的法則、規律、關係、結構與方法。</p>
+          </div>
+          <div class="p-4 bg-green-50 rounded-xl border border-green-200">
+            <h4 class="font-black text-green-900 mb-1">數學解題思維</h4>
+            <p class="text-xs text-green-700 mb-2 font-bold">目標：獲得實踐結果</p>
+            <p class="text-gray-700">重點在選擇策略、執行方法、克服障礙並完成問題解決。</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 3: 二、會考與課本實例 -->
+    <section id="tab3" class="tab-content hidden space-y-6">
+      
+      <div class="anpan-card bg-amber-50 p-6">
+        <h2 class="text-xl sm:text-2xl font-black text-anpan-red mb-2">
+          二、21世紀關鍵能力與會考/課本實例
+        </h2>
+        <p class="text-sm text-gray-700">
+          微課程設計就是找出數學試題成功解題的知識點或困難點，透過 21 世紀技能（批判思考、系統思考、溝通探究等）個個擊破。
+        </p>
+      </div>
+
+      <!-- 21世紀關鍵能力卡片牆 -->
+      <div class="anpan-card p-6 bg-white">
+        <h3 class="text-lg font-black text-anpan-brown mb-4">
+          🌐 課堂中可融合的 21 世紀能力 (21st-century Skills)
+        </h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs font-bold">
+          <div class="p-3 bg-red-100 text-red-900 rounded-xl border border-red-300">Critical Thinking<br>批判性思考</div>
+          <div class="p-3 bg-yellow-100 text-yellow-900 rounded-xl border border-yellow-300">Creativity<br>創造力</div>
+          <div class="p-3 bg-orange-100 text-orange-900 rounded-xl border border-orange-300">Research & Inquiry<br>研究與探究</div>
+          <div class="p-3 bg-green-100 text-green-900 rounded-xl border border-green-300">Systems Thinking<br>系統性思考</div>
+          <div class="p-3 bg-blue-100 text-blue-900 rounded-xl border border-blue-300">Communication<br>溝通表達</div>
+          <div class="p-3 bg-purple-100 text-purple-900 rounded-xl border border-purple-300">Reflection<br>反思自省</div>
+          <div class="p-3 bg-pink-100 text-pink-900 rounded-xl border border-pink-300">Self-direction<br>自我導向</div>
+          <div class="p-3 bg-teal-100 text-teal-900 rounded-xl border border-teal-300">Information Use<br>資訊應用</div>
+        </div>
+      </div>
+
+      <!-- 實例 1: 課本實例（批判性思考） -->
+      <div class="anpan-card p-6 bg-white">
+        <div class="flex items-center justify-between mb-3 border-b pb-2">
+          <h3 class="font-black text-lg text-anpan-red">
+            實例 1：翰林七上第三章 一元一次方程式（批判性思考）
+          </h3>
+          <span class="anpan-badge bg-red-100 text-red-800 text-xs px-2.5 py-1 rounded-full font-bold">解的合理性</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-300">
+            <p class="font-bold text-anpan-brown mb-2">情境對話：</p>
+            <p class="italic text-gray-700 mb-2">安琪：「博士，你今年幾歲？」</p>
+            <p class="italic text-gray-700 mb-2">博士：「我的年齡與我兒子相差 28 歲；且 8 年後，我的年齡是兒子的 5 倍多 4 歲。」</p>
+            <p class="font-bold text-red-600">艾美：「你騙人！」</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <p class="font-bold text-anpan-brown mb-1">思考點：為何說博士在騙人？</p>
+            <p class="text-xs text-gray-600 mb-3">列式求解：設兒子現年 x 歲，博士 (x + 28) 歲。8 年後：(x + 28) + 8 = 5(x + 8) + 4 → x + 36 = 5x + 44 → 4x = -8 → x = -2（不合常理）。</p>
+            <p class="text-xs font-bold text-anpan-red">👉 引導學生思考：不是列完算式解出數字就好，要檢驗現實生活合理性！</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 實例 2: 108會考16題（系統性思考） -->
+      <div class="anpan-card p-6 bg-white">
+        <div class="flex items-center justify-between mb-3 border-b pb-2">
+          <h3 class="font-black text-lg text-anpan-brown">
+            實例 2：108 年會考第 16 題（系統性思考）
+          </h3>
+          <span class="anpan-badge bg-yellow-100 text-yellow-800 text-xs px-2.5 py-1 rounded-full font-bold">咖啡豆折扣關係</span>
+        </div>
+        <div class="text-sm text-gray-700 bg-amber-50 p-4 rounded-xl border border-amber-200 mb-3">
+          小涵自備容器買 250g 咖啡豆付 295 元（含折價 5 元 → 原價 300 元，單價 300/250）。阿嘉買 x 克未自備容器付 y 元，關係式為 y = (300/250)x。
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div class="p-3 bg-white rounded-lg border border-gray-300 font-bold text-center">
+            1. 找元素：單價、重量、折價金額
+          </div>
+          <div class="p-3 bg-white rounded-lg border border-gray-300 font-bold text-center">
+            2. 找關係：總價與自備容器折抵邏輯
+          </div>
+          <div class="p-3 bg-white rounded-lg border border-gray-300 font-bold text-center">
+            3. 建系統：轉化為代數關係式 y = f(x)
+          </div>
+        </div>
+      </div>
+
+      <!-- 實例 3: 114會考非選（溝通表達） -->
+      <div class="anpan-card p-6 bg-white">
+        <div class="flex items-center justify-between mb-3 border-b pb-2">
+          <h3 class="font-black text-lg text-anpan-brown">
+            實例 3：114 年會考非選第 1 題（民調調整倍率 - 溝通力）
+          </h3>
+          <span class="anpan-badge bg-blue-100 text-blue-800 text-xs px-2.5 py-1 rounded-full font-bold">資訊解讀與溝通</span>
+        </div>
+        <p class="text-sm text-gray-700 mb-3">
+          透過人口占比與調查比率計算「調整倍率」。表格上方有長篇文字說明計算公式，與表格重複。
+        </p>
+        <div class="bg-blue-50 p-3.5 rounded-xl border border-blue-200 text-xs space-y-1.5 text-blue-900">
+          <p class="font-bold">思考提問設計：</p>
+
+          <p>• 紅框中的訊息是什麼意思？為什麼表格有呈現，文字還要重複說明？</p>
+          <p>• 如果沒有這一段說明會怎麼樣？這考驗了學生的什麼能力？</p>
+        </div>
+      </div>
+
+      <!-- 實例 4: 114會考題組（探究與系統思考） -->
+      <div class="anpan-card p-6 bg-white">
+        <div class="flex items-center justify-between mb-3 border-b pb-2">
+          <h3 class="font-black text-lg text-anpan-brown">
+            實例 4：114 年會考題組題（18段變速自行車 - 探究思考）
+          </h3>
+          <span class="anpan-badge bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full font-bold">齒輪比與重複組合</span>
+        </div>
+        <p class="text-sm text-gray-700 mb-3">
+          前齒輪 3 種（22, 33, 44齒），後齒輪 6 種（14, 16, 18, 21, 24, 28齒），組合有 3 × 6 = 18 種。但齒輪比相同時實際只有 14 種。
+        </p>
+        <div class="bg-green-50 p-3.5 rounded-xl border border-green-200 text-xs text-green-900 space-y-1">
+          <p class="font-bold">核心探究提問：</p>
+          <p>• 兩個變數（前齒輪、後齒輪）如何共同作用於系統？</p>
+          <p>• 為何 18 種組合最後只產生 14 種齒輪比？哪幾組產生了相同的齒輪比？</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 4: 三、提問策略與四動作 -->
+    <section id="tab4" class="tab-content hidden space-y-6">
+      
+      <div class="anpan-card bg-amber-50 p-6">
+        <h2 class="text-xl sm:text-2xl font-black text-anpan-red mb-2">
+          三、如何「引動」學生思考：從教師提問開始
+        </h2>
+        <p class="text-sm text-gray-700">
+          臺灣數學課最常見的困境：老師很會教解題，但不容易問出思考。提問不是課堂流程，而是形成性評量與思考引動的工具。
+        </p>
+      </div>
+
+      <!-- 提問 2x2 維度矩陣 -->
+      <div class="anpan-card p-6 bg-white">
+        <h3 class="text-lg font-black text-anpan-brown mb-2">
+          📐 提問的兩個維度：開放/封閉 × 遠/近
+        </h3>
+        <p class="text-xs text-gray-500 mb-4">點擊下方卡片檢視不同類型的提問特色與範例：</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- 開放 + 近 -->
+          <div class="p-4 bg-yellow-50 rounded-2xl border-2 border-yellow-300 hover:shadow-md transition">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-black text-yellow-900">開放 ＋ 近</span>
+              <span class="text-xs bg-yellow-200 text-yellow-900 px-2 py-0.5 rounded font-bold">答案多元</span>
+            </div>
+            <p class="text-xs text-gray-700 mb-2">答案多元，但思考距離不一定遠。</p>
+            <div class="bg-white p-2.5 rounded border border-yellow-200 text-xs italic text-gray-600">
+              例如：「請寫出一個答案是 3/4 的算式。」（部分學生可能只在湊數字）
+            </div>
+          </div>
+
+          <!-- 開放 + 遠 -->
+          <div class="p-4 bg-red-50 rounded-2xl border-2 border-red-300 hover:shadow-md transition">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-black text-red-900">開放 ＋ 遠</span>
+              <span class="text-xs bg-red-200 text-red-900 px-2 py-0.5 rounded font-bold">高層次推論</span>
+            </div>
+            <p class="text-xs text-gray-700 mb-2">答案多元，且需要猜想、驗證與一般化。</p>
+            <div class="bg-white p-2.5 rounded border border-red-200 text-xs italic text-gray-600">
+              例如：「哪些數乘 125 特別容易心算？為什麼？能把方法推廣嗎？」
+            </div>
+          </div>
+
+          <!-- 封閉 + 近 -->
+          <div class="p-4 bg-gray-50 rounded-2xl border-2 border-gray-300 hover:shadow-md transition">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-black text-gray-800">封閉 ＋ 近</span>
+              <span class="text-xs bg-gray-200 text-gray-800 px-2 py-0.5 rounded font-bold">程式確認</span>
+            </div>
+            <p class="text-xs text-gray-700 mb-2">答案單一，通常用於確認程序或基本概念。</p>
+            <div class="bg-white p-2.5 rounded border border-gray-200 text-xs italic text-gray-600">
+              例如：「$12 \times 25$ 是多少？」
+            </div>
+          </div>
+
+          <!-- 封閉 + 遠 -->
+          <div class="p-4 bg-orange-50 rounded-2xl border-2 border-orange-300 hover:shadow-md transition">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-black text-orange-900">封閉 ＋ 遠</span>
+              <span class="text-xs bg-orange-200 text-orange-900 px-2 py-0.5 rounded font-bold">多步推理</span>
+            </div>
+            <p class="text-xs text-gray-700 mb-2">答案可唯一，但需要列舉、比較與多步推理。</p>
+            <div class="bg-white p-2.5 rounded border border-orange-200 text-xs italic text-gray-600">
+              例如：「周長 24cm 的長方形（正整數邊長），最大面積是多少？」
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 四個提問動作 -->
+      <div class="anpan-card p-6 bg-white">
+        <h3 class="text-lg font-black text-anpan-brown mb-4">
+          💬 四個基本提問動作（形成性評量句型）
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+          
+          <div class="p-4 bg-amber-50 rounded-xl border border-amber-300">
+            <div class="font-black text-anpan-brown mb-1 flex items-center gap-1">
+              <span>1️⃣</span> 問理解
+            </div>
+            <p class="text-xs text-gray-600 mb-2">澄清條件與資訊</p>
+            <p class="text-xs font-semibold text-anpan-red">
+              「你看到什麼？」<br>「題目給了哪些資訊？」<br>「這句話是什麼意思？」
+            </p>
+          </div>
+
+          <div class="p-4 bg-amber-50 rounded-xl border border-amber-300">
+            <div class="font-black text-anpan-brown mb-1 flex items-center gap-1">
+              <span>2️⃣</span> 問詮釋
+            </div>
+            <p class="text-xs text-gray-600 mb-2">連結概念與意義</p>
+            <p class="text-xs font-semibold text-anpan-red">
+              「他為什麼這樣說？」<br>「這個式子代表什麼？」<br>「你怎麼連起來的？」
+            </p>
+          </div>
+
+          <div class="p-4 bg-amber-50 rounded-xl border border-amber-300">
+            <div class="font-black text-anpan-brown mb-1 flex items-center gap-1">
+              <span>3️⃣</span> 問評估
+            </div>
+            <p class="text-xs text-gray-600 mb-2">批判思考與檢驗</p>
+            <p class="text-xs font-semibold text-anpan-red">
+              「你同意嗎？」<br>「哪裡可能有問題？」<br>「有沒有反例？」
+            </p>
+          </div>
+
+          <div class="p-4 bg-amber-50 rounded-xl border border-amber-300">
+            <div class="font-black text-anpan-brown mb-1 flex items-center gap-1">
+              <span>4️⃣</span> 問結論
+            </div>
+            <p class="text-xs text-gray-600 mb-2">歸納與遷移應用</p>
+            <p class="text-xs font-semibold text-anpan-red">
+              「這題可以怎麼想？」<br>「你會怎麼說服別人？」<br>「下一題可以怎麼用？」
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 普通題目改造成思考任務示範 -->
+      <div class="anpan-card p-6 bg-amber-50">
+        <h3 class="text-lg font-black text-anpan-brown mb-4">
+          🔄 實例示範：把普通題目改造成思考任務（異分母分數加法）
+        </h3>
+        <div class="bg-white p-4 rounded-xl border-2 border-anpan-brown space-y-3 text-sm">
+          <div class="flex items-center gap-2 text-red-600 font-bold border-b pb-2">
+            <span>原題：</span> ½ + ⅓ = ?
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="p-2.5 bg-yellow-50 rounded border">
+              <span class="font-bold text-anpan-gold">問理解：</span> 這兩個分數的「1」一樣嗎？
+            </div>
+            <div class="p-2.5 bg-yellow-50 rounded border">
+              <span class="font-bold text-anpan-gold">問詮釋：</span> 為什麼不能直接把分母相加？
+            </div>
+            <div class="p-2.5 bg-yellow-50 rounded border">
+              <span class="font-bold text-anpan-gold">問評估：</span> 小明說答案是 $\frac{2}{5}$，你同意嗎？
+            </div>
+            <div class="p-2.5 bg-yellow-50 rounded border">
+              <span class="font-bold text-anpan-gold">問結論：</span> 什麼情況下異分母分數很好算？
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 5: 四、共備實作與工具 -->
+    <section id="tab5" class="tab-content hidden space-y-6">
+      
+      <div class="anpan-card bg-amber-50 p-6">
+        <h2 class="text-xl sm:text-2xl font-black text-anpan-red mb-2">
+          四、共備實作與學習單工具區
+        </h2>
+        <p class="text-sm text-gray-700">
+          帶走一張可用的教材改造學習單！小組實作 15-20 分鐘，將傳統試題轉化為引動思考的教學片段。
+        </p>
+      </div>
+
+      <!-- 互動式教材改造提問產生器 -->
+      <div class="anpan-card p-6 bg-white">
+        <h3 class="text-lg font-black text-anpan-brown mb-3 flex items-center gap-2">
+          <span>🛠️</span> 互動式「教材改造提問產生器」
+        </h3>
+        <p class="text-xs text-gray-500 mb-4">輸入您現有的數學題目，試著填寫思考對象與四層次提問：</p>
+
+        <div class="space-y-4 text-sm">
+          <div>
+            <label class="block font-bold text-anpan-brown mb-1">1. 原本的數學題目 (原題)</label>
+            <input id="input-orig" type="text" placeholder="例如：計算 3x + 5 = 20" class="w-full p-2.5 border-2 border-gray-300 rounded-xl focus:border-anpan-red outline-none">
+          </div>
+
+          <div>
+            <label class="block font-bold text-anpan-brown mb-1">2. 學生要思考的「對象」（關係/法則/概念）</label>
+            <input id="input-target" type="text" placeholder="例如：等式兩邊同加同減不變的平衡概念" class="w-full p-2.5 border-2 border-gray-300 rounded-xl focus:border-anpan-red outline-none">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-xs text-anpan-brown mb-1">問理解（題目給了什麼？）</label>
+              <input id="input-q1" type="text" placeholder="例如：等號左右兩邊代表什麼？" class="w-full p-2 border border-gray-300 rounded-lg text-xs">
+            </div>
+            <div>
+              <label class="block font-bold text-xs text-anpan-brown mb-1">問詮釋（為什麼這樣做？）</label>
+              <input id="input-q2" type="text" placeholder="例如：為什麼第一步要先減 5？" class="w-full p-2 border border-gray-300 rounded-lg text-xs">
+            </div>
+            <div>
+              <label class="block font-bold text-xs text-anpan-brown mb-1">問評估（你同意嗎/有反例嗎？）</label>
+              <input id="input-q3" type="text" placeholder="例如：小華說可以先除以 3，這樣對嗎？" class="w-full p-2 border border-gray-300 rounded-lg text-xs">
+            </div>
+            <div>
+              <label class="block font-bold text-xs text-anpan-brown mb-1">最想放進課堂的一句關鍵追問</label>
+              <input id="input-q4" type="text" placeholder="例如：不管怎麼移，什麼東西一直沒有變？" class="w-full p-2 border border-gray-300 rounded-lg text-xs">
+            </div>
+          </div>
+
+          <button onclick="generatePlan()" class="anpan-btn w-full bg-anpan-red text-white font-black py-2.5 rounded-xl text-center hover:bg-red-700">
+            ✨ 生成我的共備教案卡片
+          </button>
+        </div>
+
+        <!-- 產出結果區域 -->
+        <div id="plan-output" class="hidden mt-6 p-5 bg-yellow-50 rounded-2xl border-2 border-anpan-brown">
+          <div class="flex justify-between items-center mb-3 border-b border-anpan-brown pb-2">
+            <span class="font-black text-anpan-red text-base">📋 教材改造共備卡片</span>
+            <span class="text-xs bg-anpan-yellow text-anpan-brown font-bold px-2 py-0.5 rounded border border-anpan-brown">可供公開發表</span>
+          </div>
+          <div class="space-y-2 text-xs sm:text-sm text-gray-800">
+            <p><span class="font-bold text-anpan-brown">【原始題目】：</span><span id="out-orig"></span></p>
+            <p><span class="font-bold text-anpan-brown">【思考對象】：</span><span id="out-target"></span></p>
+            <p><span class="font-bold text-anpan-brown">【設計提問】：</span></p>
+            <ul class="list-disc list-inside pl-2 space-y-1 text-gray-700">
+              <li>問理解：<span id="out-q1"></span></li>
+              <li>問詮釋：<span id="out-q2"></span></li>
+              <li>問評估：<span id="out-q3"></span></li>
+            </ul>
+            <p class="pt-2 font-bold text-anpan-red">【核心關鍵追問】：<span id="out-q4" class="underline"></span></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 分享回饋原則 -->
+      <div class="anpan-card p-6 bg-white">
+        <h3 class="text-lg font-black text-anpan-brown mb-3">
+          🤝 共備分享與回饋原則（看三件事）
+        </h3>
+        <p class="text-xs text-gray-500 mb-4">分享時不評論「好不好」，而是看：</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-3.5 bg-yellow-50 rounded-xl border border-yellow-300">
+            <div class="font-bold text-anpan-brown mb-1 text-sm">1. 清楚嗎？</div>
+            是否說得出學生要思考的具體對象與關係？
+          </div>
+          <div class="p-3.5 bg-yellow-50 rounded-xl border border-yellow-300">
+            <div class="font-bold text-anpan-brown mb-1 text-sm">2. 可進入嗎？</div>
+            提問距離是否適中？學生是否有話可說？
+          </div>
+          <div class="p-3.5 bg-yellow-50 rounded-xl border border-yellow-300">
+            <div class="font-bold text-anpan-brown mb-1 text-sm">3. 有延展嗎？</div>
+            能否從答案延伸到理由、方法或一般化規律？
+          </div>
+        </div>
+
+        <div class="mt-4 p-3 bg-red-50 rounded-xl border border-red-200 text-xs font-bold text-anpan-red">
+          💬 建議回饋句型：「我看到你們想引動的思考是＿＿；我建議可以再追問＿＿。」
+        </div>
+      </div>
+
+      <!-- 研習結語：帶走四句話 -->
+      <div class="anpan-card bg-gradient-to-r from-anpan-red to-orange-600 text-white p-6 sm:p-8">
+        <h3 class="text-xl font-black mb-4 text-yellow-200 text-center">
+          🎁 研習帶走四句話
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm font-bold">
+          <div class="p-3.5 bg-white/10 rounded-xl border border-white/20">
+            1. 學生到底在這裡「想什麼」？
+          </div>
+          <div class="p-3.5 bg-white/10 rounded-xl border border-white/20">
+            2. 教師問了什麼，才讓這個思考發生？
+          </div>
+          <div class="p-3.5 bg-white/10 rounded-xl border border-white/20">
+            3. 問題和答案之間的距離有多遠？
+          </div>
+          <div class="p-3.5 bg-white/10 rounded-xl border border-white/20">
+            4. 能不能把「教解法」改成「引動思考」？
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- 使用說明 Modal 彈窗 -->
+  <div id="guide-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+    <div class="anpan-card bg-white max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 relative shadow-2xl">
+      <!-- 關閉按鈕 -->
+      <button onclick="toggleGuideModal()" class="absolute top-4 right-4 w-9 h-9 bg-gray-100 hover:bg-gray-200 text-anpan-brown font-black rounded-full flex items-center justify-center border border-anpan-brown text-lg">
+        ✕
+      </button>
+
+      <div class="flex items-center gap-3 mb-4 border-b border-gray-200 pb-3">
+        <div class="w-10 h-10 bg-anpan-red text-white rounded-xl flex items-center justify-center font-black text-xl border border-anpan-brown">
+          📖
+        </div>
+        <div>
+          <h2 class="text-xl font-black text-anpan-brown">網站操作與研習導覽說明</h2>
+          <p class="text-xs text-gray-500">協助您快速上手研習講義互動平台</p>
+        </div>
+      </div>
+
+      <div class="space-y-4 text-sm text-gray-700">
+        
+        <div class="bg-yellow-50 p-3.5 rounded-xl border border-yellow-300">
+          <h3 class="font-bold text-anpan-brown mb-1 flex items-center gap-1.5 text-base">
+            <span>1️⃣</span> 頂部章節導覽列 (Tab Navigation)
+          </h3>
+          <p class="text-xs leading-relaxed text-gray-600">
+            上方黃色導覽列分為 5 個單元。您可以依序瀏覽，或直接跳至您感興趣的章節：
+          </p>
+          <ul class="list-disc list-inside text-xs mt-1 space-y-0.5 text-gray-700 font-medium">
+            <li><strong>研習簡介與理念：</strong>研習動機與思考暖身 5 問。</li>
+            <li><strong>思考的對象與定義：</strong>釐清學生要在課堂想什麼。</li>
+            <li><strong>會考與課本實例：</strong>結合 21 世紀關鍵能力的課堂實例。</li>
+            <li><strong>提問策略與四動作：</strong>「問理解、問詮釋、問評估、問結論」提問矩陣。</li>
+            <li><strong>共備實作與工具：</strong>線上記錄與生成共備教案卡片。</li>
+          </ul>
+        </div>
+
+        <div class="bg-amber-50 p-3.5 rounded-xl border border-amber-300">
+          <h3 class="font-bold text-anpan-brown mb-1 flex items-center gap-1.5 text-base">
+            <span>2️⃣</span> 語音輔助播放 (Audio Player)
+          </h3>
+          <p class="text-xs leading-relaxed text-gray-600">
+            點擊右上角的 <span class="bg-anpan-yellow px-1.5 py-0.5 rounded text-anpan-brown font-bold">🎵 數學動起來.mp3</span> 按鈕，即可播放/暫停研習背景音樂與主題朗讀，適合小組討論或個人閱讀時背景播放。
+          </p>
+        </div>
+
+        <div class="bg-red-50 p-3.5 rounded-xl border border-red-300">
+          <h3 class="font-bold text-anpan-red mb-1 flex items-center gap-1.5 text-base">
+            <span>3️⃣</span> 互動式教案卡片產生器 (Lesson Plan Generator)
+          </h3>
+          <p class="text-xs leading-relaxed text-gray-600">
+            切換至<b>「四、共備實作與工具」</b>分頁，輸入欲改寫的數學原題與提問，點擊<b>「生成我的共備教案卡片」</b>，系統將為您排版格式化，可直接螢幕截圖或複製成果於研習討論中發表！
+          </p>
+        </div>
+
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-gray-200 text-center">
+        <button onclick="toggleGuideModal()" class="anpan-btn bg-anpan-red hover:bg-red-700 text-white font-black px-6 py-2.5 rounded-xl text-sm">
+          開始使用 🚀
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 使用說明彈窗切換邏輯
+    function toggleGuideModal() {
+      const modal = document.getElementById('guide-modal');
+      if (modal) {
+        modal.classList.toggle('hidden');
+      }
+    }
+
+    // 音訊播放控制
+    let audio = new Audio('https://files.catbox.moe/hvkgi6.mp3');
+    let isPlaying = false;
+
+    function toggleAudio() {
+      const btn = document.getElementById('audio-btn');
+      const icon = document.getElementById('audio-icon');
+      const text = document.getElementById('audio-text');
+
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        btn.classList.remove('ring-4', 'ring-yellow-300', 'bg-red-600', 'text-white');
+        btn.classList.add('bg-anpan-yellow', 'text-anpan-brown');
+        icon.innerText = '🎵';
+        text.innerText = '🎵數學動起來.mp3';
+      } else {
+        audio.play().then(() => {
+          isPlaying = true;
+          btn.classList.add('ring-4', 'ring-yellow-300', 'bg-red-600', 'text-white');
+          btn.classList.remove('bg-anpan-yellow', 'text-anpan-brown');
+          icon.innerText = '⏸️';
+          text.innerText = '暫停播放';
+        }).catch(err => {
+          console.error(err);
+          alert('無法播放音訊，請確認網路連線或授權瀏覽器播放權限。');
+        });
+      }
+    }
+
+    audio.onended = function() {
+      isPlaying = false;
+      const btn = document.getElementById('audio-btn');
+      const icon = document.getElementById('audio-icon');
+      const text = document.getElementById('audio-text');
+      btn.classList.remove('ring-4', 'ring-yellow-300', 'bg-red-600', 'text-white');
+      btn.classList.add('bg-anpan-yellow', 'text-anpan-brown');
+      icon.innerText = '🎵';
+      text.innerText = '🎵數學動起來.mp3';
+    };
+
+    // Tab 切換邏輯
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-anpan-red', 'text-white', 'shadow-lg', 'scale-105');
+        btn.classList.add('bg-amber-100', 'text-anpan-brown', 'hover:bg-amber-200');
+      });
+
+      const activeTab = document.getElementById(tabId);
+      if (activeTab) {
+        activeTab.classList.remove('hidden');
+      }
+
+      const activeBtn = document.getElementById('btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-amber-100', 'text-anpan-brown', 'hover:bg-amber-200');
+        activeBtn.classList.add('bg-anpan-red', 'text-white', 'shadow-lg', 'scale-105');
+      }
+    }
+
+    // 生成教案卡片邏輯
+    function generatePlan() {
+      const orig = document.getElementById('input-orig').value || '未填寫原始題目';
+      const target = document.getElementById('input-target').value || '未填寫思考對象';
+      const q1 = document.getElementById('input-q1').value || '未填寫理解提問';
+      const q2 = document.getElementById('input-q2').value || '未填寫詮釋提問';
+      const q3 = document.getElementById('input-q3').value || '未填寫評估提問';
+      const q4 = document.getElementById('input-q4').value || '未填寫關鍵追問';
+
+      document.getElementById('out-orig').innerText = orig;
+      document.getElementById('out-target').innerText = target;
+      document.getElementById('out-q1').innerText = q1;
+      document.getElementById('out-q2').innerText = q2;
+      document.getElementById('out-q3').innerText = q3;
+      document.getElementById('out-q4').innerText = q4;
+
+      document.getElementById('plan-output').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
